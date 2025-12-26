@@ -8,7 +8,6 @@ authors = [
 ]
 requires-python = ">=3.9.16"
 dependencies = [
-    "jupyter>=1.1.1",
     "matplotlib>=3.9.4",
     "numpy>=2.0.2",
     "pandas>=2.3.3",
@@ -16,6 +15,34 @@ dependencies = [
     "seaborn>=0.13.2",
     "torch>=2.8.0",
 ]
+
+[dependency-groups]
+dev = [
+    "jupyter>=1.1.1",
+]
+pre-commit = [
+    "pre-commit>=4.3.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
 
 [project.scripts]
 pytorchers = "pytorchers:main"
