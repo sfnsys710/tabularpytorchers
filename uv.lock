@@ -3130,7 +3130,7 @@ wheels = [
 ]
 
 [[package]]
-name = "pytorchers"
+name = "tabularpytorchers"
 version = "0.1.4"
 source = { editable = "." }
 dependencies = [

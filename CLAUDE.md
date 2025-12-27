@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-pytorchers is a PyTorch library for tabular datasets with sklearn compatibility. Implements both regression and classification models with full sklearn Pipeline, GridSearchCV, and cross-validation support.
+tabularpytorchers is a PyTorch library for tabular datasets with sklearn compatibility. Implements both regression and classification models with full sklearn Pipeline, GridSearchCV, and cross-validation support.
 
 **⚠️ Early Stage:** This package was assembled from various notebook experiments and is in early development. The API is not yet stable - expect rough edges, missing features, and potential breaking changes. The codebase prioritizes experimentation over production readiness.
 
@@ -150,8 +150,8 @@ For GridSearchCV and Pipeline to work:
 ## Project Structure
 
 ```
-pytorchers/
-├── src/pytorchers/
+tabularpytorchers/
+├── src/tabularpytorchers/
 │   ├── __init__.py          # Public API exports (BaseNNRegressor, BaseNNClassifier, etc.)
 │   ├── reg.py               # BaseNNRegressor + NNRegressorEstimator
 │   ├── clf.py               # BaseNNClassifier + NNClassifierEstimator

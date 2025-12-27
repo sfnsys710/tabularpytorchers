@@ -1,10 +1,10 @@
-# pytorchers
+# tabularpytorchers
 
 PyTorch helpers for tabular datasets with sklearn compatibility, model inspection, and visualization tools.
 
 > **⚠️ Early Stage Development:** This package is in early development and was assembled from various notebook experiments. The API is not yet stable and you should expect breaking changes in future releases. Use in production at your own risk.
 
-## Why pytorchers?
+## Why tabularpytorchers?
 
 Deep learning is remarkably potent even for tabular data, but PyTorch's flexibility comes with overhead that's particularly repetitive for tabular use cases:
 
@@ -21,7 +21,7 @@ Deep learning is remarkably potent even for tabular data, but PyTorch's flexibil
 - Tabular deep learning typically uses straightforward architectures (stacked linear layers with ReLU)
 - Writing the same `nn.Module` structure repeatedly is tedious and error-prone
 
-**pytorchers solves these problems** by providing sklearn-compatible wrappers, automated training loops, and reusable architecture templates - letting you focus on experimentation rather than boilerplate.
+**tabularpytorchers solves these problems** by providing sklearn-compatible wrappers, automated training loops, and reusable architecture templates - letting you focus on experimentation rather than boilerplate.
 
 ## Key Features
 
@@ -44,7 +44,7 @@ For local development:
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd pytorchers
+cd tabularpytorchers
 
 # Install in editable mode
 pip install -e .
@@ -58,7 +58,7 @@ uv pip install -e .
 ## Quick Start
 
 ```python
-from pytorchers.reg import BaseNNRegressor, NNRegressorEstimator
+from tabularpytorchers.reg import BaseNNRegressor, NNRegressorEstimator
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
@@ -86,7 +86,7 @@ See the notebooks for detailed examples and tutorials.
 Wrap custom PyTorch models for sklearn compatibility:
 
 ```python
-from pytorchers.reg import NNRegressorEstimator, BaseNNRegressor
+from tabularpytorchers.reg import NNRegressorEstimator, BaseNNRegressor
 
 custom_model = BaseNNRegressor(input_size=10, layers=[128, 64, 32])
 estimator = NNRegressorEstimator(model=custom_model, epochs=200)
@@ -100,7 +100,7 @@ estimator.fit(X_train, y_train)
 Wrap custom PyTorch models for sklearn compatibility:
 
 ```python
-from pytorchers.clf import NNClassifierEstimator, BaseNNClassifier
+from tabularpytorchers.clf import NNClassifierEstimator, BaseNNClassifier
 
 custom_model = BaseNNClassifier(input_size=10, layers=[128, 64, 32], n_classes=2)
 estimator = NNClassifierEstimator(model=custom_model, class_weight='balanced')
@@ -114,7 +114,7 @@ estimator.fit(X_train, y_train)
 Customizable feedforward neural network for regression. Automatically creates linear layers with ReLU activations and a final output layer (no activation).
 
 ```python
-from pytorchers.reg import BaseNNRegressor
+from tabularpytorchers.reg import BaseNNRegressor
 model = BaseNNRegressor(input_size=13, layers=[64, 32, 8], output_size=1)
 ```
 
@@ -123,7 +123,7 @@ model = BaseNNRegressor(input_size=13, layers=[64, 32, 8], output_size=1)
 Customizable feedforward neural network for classification. Automatically creates linear layers with ReLU activations and outputs raw logits (no softmax).
 
 ```python
-from pytorchers.clf import BaseNNClassifier
+from tabularpytorchers.clf import BaseNNClassifier
 model = BaseNNClassifier(input_size=10, layers=[64, 32, 8], n_classes=3)
 ```
 
@@ -162,7 +162,7 @@ Add visualization capabilities to any PyTorch model via multiple inheritance:
 
 ```python
 import torch.nn as nn
-from pytorchers.viz import ForwardTracker
+from tabularpytorchers.viz import ForwardTracker
 
 class InspectableModel(nn.Module, ForwardTracker):
     def __init__(self, input_size, layers):
@@ -186,7 +186,7 @@ Creates heatmaps of neuron activations and truth vs prediction plots. See notebo
 All models work seamlessly with sklearn's Pipeline, cross-validation, and GridSearchCV:
 
 ```python
-from pytorchers.reg import BaseNNRegressor, NNRegressorEstimator
+from tabularpytorchers.reg import BaseNNRegressor, NNRegressorEstimator
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import cross_val_score, GridSearchCV
@@ -354,7 +354,7 @@ This project is in early stages and was born from consolidating useful patterns 
 ```bash
 # Clone repository
 git clone <repository-url>
-cd pytorchers
+cd tabularpytorchers
 
 # Install with development dependencies
 pip install -e ".[dev]"
@@ -384,8 +384,8 @@ pre-commit run
 ### Project Structure
 
 ```
-pytorchers/
-├── src/pytorchers/      # Main package
+tabularpytorchers/
+├── src/tabularpytorchers/      # Main package
 │   ├── __init__.py      # Public API exports
 │   ├── reg.py           # Regression models (BaseNNRegressor, NNRegressorEstimator)
 │   ├── clf.py           # Classification models (BaseNNClassifier, NNClassifierEstimator)
