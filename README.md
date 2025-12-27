@@ -1,53 +1,35 @@
 # tabularpytorchers
 
-**Higher-level PyTorch abstractions** for tabular data with **visual inspection of neural nets**.
+Stop writing pytorch boilerplate code. Have an easier training and inference visual inspection.
 
-Stop writing boilerplate training loops. Start understanding what your models are learning.
+**1. Higher-level pytorch abstractions**
+**2. Easier training and inference visual inspection**
 
 > **⚠️ Early Stage Development:** This package is in early development and was assembled from various notebook experiments. The API is not yet stable and you should expect breaking changes in future releases. Use in production at your own risk.
 
 ## Why tabularpytorchers?
 
-PyTorch is powerful for tabular data, but using it means writing the same boilerplate code repeatedly and flying blind when models misbehave. tabularpytorchers solves both problems:
+PyTorch is powerful for tabular data, but using it means writing the same boilerplate code repeatedly and flying blind when models misbehave. tabularpytorchers solves both problems with higher-level abstractions and visual debugging tools.
 
-### 1. Abstraction over PyTorch Boilerplate
+### Abstraction over PyTorch Boilerplate
 
-**The Problem:**
-- Every PyTorch experiment requires manual training loops (batching, optimization, validation splits)
-- Sklearn integration requires custom wrapper classes every time
-- Simple feedforward architectures require writing the same `nn.Module` structure repeatedly
+Stop writing manual training loops and sklearn wrapper classes for every experiment.
 
-**The Solution:**
-- **Pre-built sklearn-compatible estimators** - Drop your PyTorch model into `NNRegressorEstimator` or `NNClassifierEstimator` and get automatic training loops, validation splits, and sklearn compatibility
-- **Configurable architectures** - Use `BaseNNRegressor` or `BaseNNClassifier` instead of writing `nn.Module` classes for standard feedforward networks
+- **Sklearn-compatible estimators** - Drop any PyTorch model into `NNRegressorEstimator` or `NNClassifierEstimator` for automatic training loops, validation splits, and sklearn compatibility
+- **Pre-built architectures** - Configure `BaseNNRegressor` or `BaseNNClassifier` with simple parameters instead of writing `nn.Module` classes for standard feedforward networks
 - **Full sklearn integration** - Works seamlessly with `Pipeline`, `GridSearchCV`, and `cross_val_score` out of the box
-
-### 2. Visual Inspection of Neural Nets
-
-**The Problem:**
-- When your tabular model makes bad predictions, you're flying blind
-- Hard to tell if you have data leakage, distribution shift, or feature engineering issues
-- No easy way to understand which features or layers are causing problems
-
-**The Solution:**
-- **ForwardTracker mixin** - Capture layer activations with a simple mixin class
-- **Activation visualization** - Heatmaps showing what each layer learns across your dataset
-- **Train/validation comparison** - Detect data leakage and distribution shift by comparing activation patterns
-- **Error analysis** - Identify which layers behave differently for error cases vs correct predictions
-
-## Key Features
-
-**Abstraction over PyTorch:**
-- **Sklearn-compatible wrappers** - `NNRegressorEstimator` and `NNClassifierEstimator` handle training loops, validation splits, and data conversions automatically
-- **Pre-built architectures** - `BaseNNRegressor` and `BaseNNClassifier` eliminate repetitive `nn.Module` boilerplate
-- **Full sklearn integration** - Works with `Pipeline`, `GridSearchCV`, and `cross_val_score` out of the box
 - **Smart defaults** - Automatic label encoding, stratified splits for classification, progress tracking
 
-**Visual Inspection of Neural Nets:**
+### Easier training and inference visual inspection
+
+Understand what your model is learning and debug unexpected behavior through activation visualization.
+
 - **ForwardTracker mixin** - Add activation tracking to any PyTorch model via multiple inheritance
-- **Activation visualization** - Heatmaps showing what each layer learns
-- **Comparative analysis** - Side-by-side train vs validation activation patterns
-- **Debugging tools** - Detect data leakage, distribution shift, and problematic features
+- **Activation visualization** - Heatmaps showing what each layer learns across your dataset
+- **Train/validation comparison** - Detect data leakage and distribution shift by comparing activation patterns side-by-side
+- **Error analysis** - Identify which layers behave differently for error cases vs correct predictions
+- **Loss / Metrics over training** - Visualize loss and metrics over training epochs
+- **(UPCOMING) Gradient helthy flow visualization** - Visualize healthy gradient flow through your network
 
 **Python:** >=3.9.16
 
@@ -123,125 +105,41 @@ model.plot_compared_activations(
 
 See the notebooks for detailed examples and tutorials.
 
-## Core Features
+## Usage Guide
 
-### Sklearn-Compatible Models
+### Pre-Built Estimators
 
-#### Regression
+Wrap any PyTorch model for automatic training loops, validation splits, and full sklearn compatibility.
 
-##### NNRegressorEstimator - Wrapper for Custom Regression Models
-
-Wrap custom PyTorch models for sklearn compatibility:
-
-```python
-from tabularpytorchers.reg import NNRegressorEstimator, BaseNNRegressor
-
-custom_model = BaseNNRegressor(input_size=10, layers=[128, 64, 32])
-estimator = NNRegressorEstimator(model=custom_model, epochs=200)
-estimator.fit(X_train, y_train)
-```
-
-#### Classification
-
-##### NNClassifierEstimator - Wrapper for Custom Classification Models
-
-Wrap custom PyTorch models for sklearn compatibility:
-
-```python
-from tabularpytorchers.clf import NNClassifierEstimator, BaseNNClassifier
-
-custom_model = BaseNNClassifier(input_size=10, layers=[128, 64, 32], n_classes=2)
-estimator = NNClassifierEstimator(model=custom_model, class_weight='balanced')
-estimator.fit(X_train, y_train)
-```
-
-### Model Architecture
-
-#### BaseNNRegressor
-
-Customizable feedforward neural network for regression. Automatically creates linear layers with ReLU activations and a final output layer (no activation).
-
-```python
-from tabularpytorchers.reg import BaseNNRegressor
-model = BaseNNRegressor(input_size=13, layers=[64, 32, 8], output_size=1)
-```
-
-#### BaseNNClassifier
-
-Customizable feedforward neural network for classification. Automatically creates linear layers with ReLU activations and outputs raw logits (no softmax).
-
-```python
-from tabularpytorchers.clf import BaseNNClassifier
-model = BaseNNClassifier(input_size=10, layers=[64, 32, 8], n_classes=3)
-```
-
-### Model Inspection & Visualization
-
-#### Why Visualize Hidden Activations?
-
-The `ForwardTracker` mixin is inspired by cutting-edge CNN visualization research, particularly the seminal work "Visualizing and Understanding Convolutional Neural Networks." That research showed how visualizing which parts of an image maximize hidden activations helped researchers understand that:
-
-- **Early CNN layers** learn basic features (edges, corners, colors)
-- **Later layers** learn higher-level semantic features (object parts, faces)
-
-**Adapting this to tabular data:**
-
-This visualization approach is particularly valuable for tabular datasets when you need to debug unexpected model behavior:
-
-1. **Data Leakage Detection:**
-   - Assumption: Similar predicted values should have similar hidden activation distributions
-   - Strategy: Split your target into deciles and visualize train vs. test activations
-   - Red flag: If distributions diverge significantly, you may have leakage or distribution shift
-
-2. **Error Analysis:**
-   - When the model makes large prediction errors (predicting too high or too low)
-   - Compare the hidden activations of the error case against similar target values from training
-   - Identify which layers show divergent activations - this reveals which features caused the model to deviate
-   - Use this to decide whether to engineer features differently, add regularization, or investigate data quality
-
-3. **Model Health Checks:**
-   - Visualize activation patterns between train and validation sets
-   - Ensure the model learns consistent representations across splits
-   - Detect if certain neurons are "dead" (always near zero) or saturated
-
-#### ForwardTracker Mixin
-
-Add visualization capabilities to any PyTorch model via multiple inheritance:
-
-```python
-import torch.nn as nn
-from tabularpytorchers.viz import ForwardTracker
-
-class InspectableModel(nn.Module, ForwardTracker):
-    def __init__(self, input_size, layers):
-        nn.Module.__init__(self)
-        ForwardTracker.__init__(self)
-        # ... define your layers ...
-
-    def forward(self, x):
-        # ... your forward pass ...
-        return x
-
-# Visualize activations
-model.plot_activations(X_tensor, y_tensor, agg_func=torch.mean)
-model.plot_compared_activations(dataset1=(X_train, y_train), dataset2=(X_val, y_val))
-```
-
-Creates heatmaps of neuron activations and truth vs prediction plots. See notebooks for detailed examples.
-
-## Usage Examples
-
-All models work seamlessly with sklearn's Pipeline, cross-validation, and GridSearchCV:
-
+**Regression:**
 ```python
 from tabularpytorchers.reg import BaseNNRegressor, NNRegressorEstimator
+
+model = BaseNNRegressor(input_size=13, layers=[64, 32])
+estimator = NNRegressorEstimator(model=model, epochs=100)
+estimator.fit(X_train, y_train)
+predictions = estimator.predict(X_test)
+```
+
+**Classification:**
+```python
+from tabularpytorchers.clf import BaseNNClassifier, NNClassifierEstimator
+
+model = BaseNNClassifier(input_size=10, layers=[64, 32], n_classes=3)
+estimator = NNClassifierEstimator(model=model, class_weight='balanced')
+estimator.fit(X_train, y_train)
+predictions = estimator.predict(X_test)
+probabilities = estimator.predict_proba(X_test)
+```
+
+### Sklearn Integration
+
+All estimators work seamlessly with sklearn's ecosystem:
+
+```python
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import cross_val_score, GridSearchCV
-
-# Create model and estimator
-model = BaseNNRegressor(input_size=13, layers=[64, 32])
-estimator = NNRegressorEstimator(model=model, epochs=100)
 
 # Pipeline
 pipe = Pipeline([
@@ -259,10 +157,39 @@ grid_search = GridSearchCV(pipe, param_grid, cv=3)
 grid_search.fit(X_train, y_train)
 ```
 
-**For complete examples**, see the notebooks which demonstrate:
-- Regression: Boston Housing dataset with full workflow
-- Classification: Iris dataset with class weighting and probability predictions
-- Visualization: Activation analysis and error debugging
+### Model Inspection & Visualization
+
+Add activation tracking to any PyTorch model to understand what your network is learning.
+
+**Why visualize hidden activations?** Inspired by CNN visualization research, this approach helps debug tabular models by:
+
+1. **Detecting data leakage** - Compare train vs validation activation patterns to spot distribution shifts
+2. **Analyzing errors** - Identify which layers behave differently for incorrect predictions
+3. **Health checks** - Ensure consistent representations and detect dead/saturated neurons
+
+**Usage:**
+```python
+import torch.nn as nn
+from tabularpytorchers.viz import ForwardTracker
+
+class InspectableModel(nn.Module, ForwardTracker):
+    def __init__(self, input_size, layers):
+        nn.Module.__init__(self)
+        ForwardTracker.__init__(self)
+        # ... define your layers ...
+
+    def forward(self, x):
+        # ... your forward pass ...
+        return x
+
+# Visualize and compare activations
+model.plot_activations(X_tensor, y_tensor, agg_func=torch.mean)
+model.plot_compared_activations(dataset1=(X_train, y_train), dataset2=(X_val, y_val))
+```
+
+**For complete examples**, see the notebooks:
+- `notebooks/reg_demo.ipynb` - Regression with Pipeline, cross-validation, and activation visualization
+- `notebooks/clf_demo.ipynb` - Classification with class weighting, probability predictions, and label encoding
 
 ## API Reference
 
@@ -451,4 +378,6 @@ tabularpytorchers/
 
 ## License
 
-[Add your license information here]
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+Copyright (c) 2025 sfnsys710

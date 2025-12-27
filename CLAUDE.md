@@ -4,10 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-tabularpytorchers provides **higher-level PyTorch abstractions** for tabular data with **visual inspection of neural nets**. The library solves two core problems:
+tabularpytorchers provides **higher-level PyTorch abstractions** for tabular data with **Easier training and inference visual inspection**. The library solves two core problems:
 
 1. **Abstraction over PyTorch boilerplate** - Eliminates repetitive training loops, model building, and sklearn integration code for tabular use cases
-2. **Visual inspection of neural nets** - Provides activation visualization tools to understand what your model is learning and debug unexpected behavior
+2. **Easier training and inference visual inspection** - Provides activation visualization tools to understand what your model is learning and debug unexpected behavior
 
 **Core capabilities:**
 - Sklearn-compatible wrappers that handle training loops, validation splits, and data conversions automatically
@@ -83,7 +83,7 @@ The library implements two core themes through complementary design patterns:
   - Users configure with simple parameters instead of writing nn.Module classes
   - Dynamic layer creation using `setattr`/`getattr` (not ModuleList)
 
-### 2. Visual Inspection of Neural Nets - Mixin Pattern (viz.py)
+### 2. Easier training and inference visual inspection - Mixin Pattern (viz.py)
 
 **Goal:** Understand what the model is learning and debug unexpected behavior.
 
