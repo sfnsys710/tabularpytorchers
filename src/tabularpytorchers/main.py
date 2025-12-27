@@ -1,5 +1,5 @@
 def main():
-    print("Hello from pytorchers!")
+    print("Hello from tabularpytorchers!")
 
 
 if __name__ == "__main__":
