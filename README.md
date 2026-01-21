@@ -5,8 +5,6 @@ Stop writing pytorch boilerplate code. Have an easier training and inference vis
 **1. Higher-level pytorch abstractions**
 **2. Easier training and inference visual inspection**
 
-> **⚠️ Early Stage Development:** This package is in early development and was assembled from various notebook experiments. The API is not yet stable and you should expect breaking changes in future releases. Use in production at your own risk.
-
 ## Why tabularpytorchers?
 
 PyTorch is powerful for tabular data, but using it means writing the same boilerplate code repeatedly and flying blind when models misbehave. tabularpytorchers solves both problems with higher-level abstractions and visual debugging tools.
